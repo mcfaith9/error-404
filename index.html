@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="window-style.css">
+	<style type="text/css">
+		@font-face {
+			font-family: 'Source Code Pro';
+			font-style: normal;
+			font-weight: 400;
+			src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v4/mrl8jkM18OlOQN8JLgasDxM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+		}
+
+		* {
+		  border: 0;
+		  box-sizing: border-box;
+		  margin: 0;
+		  padding: 0; 
+		}
+
+		body {
+			font-family: Source Code Pro;
+			background:#000;
+			color: #00FF00;
+			margin:0;
+			font-size: 13px;
+		}
+
+		.output-console {
+			position:fixed;
+			overflow:hidden;
+		}
+
+		p { 
+			margin:0
+		}
+
+		button {
+			color: #000000;
+			cursor: url(https://assets.codepen.io/416221/win95_cursor_regular.png) 0 0, default;
+			font: 12px/18px "Source Code Pro", Source Code Pro, sans-serif; 
+		}
+	</style>
+</head>
+<body>
+	<code class="output-console"></code>	
+
+	<div id="error-0" class="window window--active" role="alertdialog" aria-modal="true" aria-labelledby="error-label-0" aria-describedby="error-desc-0" data-window hidden>
+		<div class="window__header" data-header>
+			<div id="error-label-0" class="window__title" data-label>Error...</div>
+			<button class="window__button" type="button" disabled>
+				<span class="window__sprite window__sprite--close-disabled"></span>
+				<span class="window__sr">Close</span>
+			</button>
+		</div>
+		<div class="window__body">
+			<img class="window__body-icon" alt="White X on a red circle with dark red outline and drop shadow" src="https://assets.codepen.io/416221/win95_error_icon.png" width="32" height="32">
+			<p id="error-desc-0" class="window__body-text" data-desc></p>
+		</div>
+		<div class="window__footer">
+			<button class="window__button window__button--lg" type="button" data-ok>OK</button>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var outputConsole = document.querySelector(".output-console");
+
+	outputConsole.style.height = '100%';
+	outputConsole.style.top = '0';
+
+	/* fake console stuff */
+	var commandStart = ['(0.2)-: [Dxy] 811045', 
+		'Phishing Type ', 
+		'Analyzing ', 
+		'Estimating Approximate Location of ', 
+		'Compressing ', 
+		'Requesting Authorization From : ', 
+		'wget -a -t ', 
+		'tar -xzf ', 
+		'Gcash Betnx ', 
+		'Error',
+		'Account Block '],
+	commandParts = ['Error', 
+		'Gcash Betnx...', 
+		' .... Phishing Type ... ', 
+		"Error...",
+		"Error...",
+		"Error...",
+		"Error..."],
+	commandResponses = ['Authorizing...', 
+		'Authorized...', 
+		'Access Denied..', 
+		'Account Not found....', 
+		'Account Block.', 
+		"Account (0012830927046)  ₱1,000.00",
+		"Account (0012831295669)  ₱3,000.00",
+		"Account (0012831511524)  ₱8,000.00",
+		"Account (0012831727722)  ₱33,000.00",
+		"Account (0012838243735)  ₱27,801.00",
+		"Account (0012877232430)  ₱1,000.00",
+		"Account (0013099786145)  ₱36,142.00",
+		"Error...",
+		"Error...",
+		"Error...",
+		"Error...",
+		"Error...",
+		"Error..."
+		],
+	terms = [
+        "$(function(){\n\t$.database.get('Account not found')\n});",
+        "exec({\n\t'0012830927046' : '₱33,000.00',\n\t'0012877232430' : '₱36,142.00'\n});",
+        ">>> Error",
+        ">>> Return 0;",
+        "## Account Disconnected",
+        "## Account Denied",
+        "## Account not found",
+        "ACCESS DENIED",
+        "ACCESS DENIED",
+        "Error: \n>>> ACCESS DENIED\n## Account not found",
+        "\n\nNMAP\n\n\tIP: 198.162.0.24\n\tPlatform: Gcash Betnx\n\tAccount Disconnected: 0013099786145\n\tAccount Disconnected: 0012831295669\n\t0 flags up\n\n\t",
+        "Error...",
+        "/bin ~ # sudo chown /system/",
+        "$.system.on();\n\t[SYSTEM]:Antivirus Protocol Overridden\n\t[SERVER]:Firewall Disabled\n\t",
+        "[ROOT]:Filesystem Formatted"
+    ],
+	isProcessing = false,
+	processTime = 0,
+	lastProcess = 0;
+
+	function consoleOutput(){
+		var textEl = document.createElement('p');
+
+		if(isProcessing){
+			textEl = document.createElement('span');
+			textEl.textContent += Math.random() + "";
+			if(Date.now() > lastProcess + processTime){
+				isProcessing = false;   
+			}
+		}else{
+			var commandType = ~~(Math.random() * 3);
+
+			switch(commandType){
+			case 0:
+				textEl.textContent = commandStart[~~(Math.random()*commandStart.length)] + commandParts[~~(Math.random()*commandParts.length)];
+				break;
+			case 1:
+				textEl.textContent = terms[~~(Math.random()*terms.length)] + terms[~~(Math.random()*terms.length)];
+				break;
+			case 3: 
+				isProcessing = true;
+				processTime = ~~(Math.random()*5000);
+				lastProcess = Date.now();
+			default:
+				textEl.textContent = commandResponses[~~(Math.random()*commandResponses.length)];
+				break;
+			}
+		}
+
+		outputConsole.scrollTop = outputConsole.scrollHeight;
+		outputConsole.appendChild(textEl);
+
+		if (outputConsole.scrollHeight > window.innerHeight) {
+			var removeNodes = outputConsole.querySelectorAll('*');
+
+			for(var n = 0; n < ~~(removeNodes.length/3); n++){
+				outputConsole.removeChild(removeNodes[n]);
+			}
+		}
+
+		setTimeout(consoleOutput, ~~(Math.random()*200));
+	}
+
+	setTimeout(function() {   
+		consoleOutput();
+	}, 200);
+
+	window.addEventListener("DOMContentLoaded",() => {
+		const system = new Windows95("body");
+	});
+
+	class Windows95 {
+		cursorDragPos = null;
+		errorDragging = null;
+		errorLimit = 50;
+		errors = [];
+		sound = {
+			chord: new Howl({
+				src: ["https://assets.codepen.io/416221/chord.wav"],
+				autoplay: false,
+				loop: false,
+				volume: 1.0
+			})
+		};
+
+		constructor(el) {
+			this.el = document.querySelector(el);
+			this.el?.addEventListener("click", this.errorLoop.bind(this));
+			this.el?.addEventListener("keyup", this.errorLoop.bind(this));
+	        // down
+			this.el?.addEventListener("mousedown", this.dragErrorStart.bind(this));
+			this.el?.addEventListener("touchstart", this.dragErrorStart.bind(this));
+	        // move
+			this.el?.addEventListener("mousemove", this.dragError.bind(this));
+			this.el?.addEventListener("touchmove", this.dragError.bind(this));
+	        // up
+			this.el?.addEventListener("mouseup", this.dragErrorEnd.bind(this));
+			this.el?.addEventListener("mouseleave", this.dragErrorEnd.bind(this));
+			this.el?.addEventListener("contextmenu", this.dragErrorEnd.bind(this));
+			this.el?.addEventListener("touchend", this.dragErrorEnd.bind(this));
+
+			this.spawnError(0,0,true);
+		}
+		async errorLoop(e) {
+			const { code, target } = e;
+
+			if (code === "Enter" || code === "NumpadEnter" || (!code && target?.hasAttribute("data-ok"))) {
+				const activeError = this.errors.find(error => error.id === target?.getAttribute("data-ok") || error.active);
+
+				if (activeError) {
+	                // kill the error if active, filter out the active
+					activeError.close();
+					this.errors = this.errors.filter(error => !error.isClosing);
+	                // reactivate the last
+					this.errors[this.errors.length - 1]?.activate();
+	                // spawn new errors by chance
+					let spawns = Utils.randomInt(this.errors.length ? 0 : 1,5);
+					let overLimit = (this.errors.length + spawns) - this.errorLimit;
+	                // adjust the spawns to not exceed the limit
+					if (overLimit > 0) spawns = this.errorLimit - this.errors.length;
+
+					for (let s = 0; s < spawns; ++s) {
+						await new Promise((res) => setTimeout(res, 100));
+						if (this.errors.length) this.spawnError();
+						else this.spawnError(0,0);
+					}
+				}
+			} else if (!code) {
+				this.switchError(e);
+			}
+		}
+		dragError(e) {
+			if (this.errorDragging) {
+				let moveX = 0;
+				let moveY = 0;
+
+				if (e.touches?.length) {
+	                // touchscreen
+					const [touch] = e.touches;
+
+					moveX = touch.clientX - this.cursorDragPos.x;
+					moveY = touch.clientY - this.cursorDragPos.y;
+
+					this.errorDragging.moveBy(moveX,moveY);
+					this.cursorDragPos.x = touch.clientX;
+					this.cursorDragPos.y = touch.clientY;
+
+				} else {
+	                // mouse
+					moveX = e.clientX - this.cursorDragPos.x;
+					moveY = e.clientY - this.cursorDragPos.y;
+
+					this.errorDragging.moveBy(moveX,moveY);
+					this.cursorDragPos.x = e.clientX;
+					this.cursorDragPos.y = e.clientY;
+				}
+			}
+		}
+		dragErrorStart(e) {
+			let { target } = e;
+
+			if (target?.nodeName !== "BUTTON") {
+	            // ensure it’s the header or anything in it that’s not a button
+				let headerFound = false;
+
+				do {
+					headerFound = target?.hasAttribute("data-header");
+					target = target?.parentElement;
+				} while (target && !headerFound)
+
+				if (headerFound) {
+	                // make the error being dragged active
+					this.errorDragging = this.errors.find(error => error.el.id === target.id);
+					this.switchError(e);
+
+					if (e.touches?.length) {
+	                    // touchscreen
+						const [touch] = e.touches;
+
+						this.cursorDragPos = { x: touch.clientX, y: touch.clientY };
+					} else {
+	                    // mouse
+						this.cursorDragPos = { x: e.clientX, y: e.clientY };
+					}
+				}
+			}
+		}
+		dragErrorEnd() {
+			this.cursorDragPos = null;
+			this.errorDragging = null;
+		}
+		spawnError(x,y,muted) {
+			this.errors.forEach(error => {
+				error.deactivate();
+			});
+			this.errors.push(new Windows95Error(this.el,x,y));
+	        // chord sound
+			if (!muted) this.sound.chord.play();
+		}
+		switchError(e) {
+			this.errors.find(error => error.active)?.deactivate();
+
+			let { target } = e;
+
+			do {
+				target = target?.parentElement;
+			} while (target && !target?.hasAttribute("data-window"))
+
+			if (target) {
+	            // get the window by element ID and make active
+				const errorFound = this.errors.find(error => error.el.id === target.id);
+
+				if (errorFound) {
+					this.errors.push(this.errors.splice(this.errors.indexOf(errorFound),1)[0]);
+					this.errors[this.errors.length - 1]?.activate();
+				}
+			}
+		}
+	}
+
+	class Windows95Error {
+		activeClass = "window--active";
+		active = false;
+		el = null;
+		id = Utils.randomInt().toString(16);
+		isClosing = false;
+		x = 0;
+		y = 0;
+
+		constructor(parentEl,x,y) {
+			this.parent = parentEl;
+			const windowEls = Array.from(this.parent.querySelectorAll("[data-window]"));
+			const windowNew = windowEls[windowEls.length - 1]?.cloneNode(true);
+
+			if (this.parent && windowNew) {
+				this.el = windowNew;
+				this.parent.appendChild(windowNew);
+				windowNew.id = `error-${this.id}`;
+				windowNew.hidden = false;
+				windowNew.querySelector("[data-desc]").textContent = this.errorMessage;
+
+	            // configuration start
+				const halfElWidth = Math.round(this.parent.offsetWidth / 2);
+				const halfElHeight = Math.round(this.parent.offsetHeight / 2);
+				const halfWinWidth = Math.round(windowNew.offsetWidth / 2);
+				const halfWinHeight = Math.round(windowNew.offsetHeight / 2);
+	            // x-position
+				if (x === undefined) this.x = Utils.randomInt(-halfElWidth + halfWinWidth,halfElWidth - halfWinWidth);
+				else this.x = x;
+	            // y-position
+				if (y === undefined) this.y = Utils.randomInt(-halfElHeight + halfWinHeight,halfElHeight - halfWinHeight);
+				else this.y = y;
+	            // wire up all the parts
+				const label = `error-label-${this.id}`;
+				const desc = `error-desc-${this.id}`;
+
+				windowNew.setAttribute("aria-labelledby", label);
+				windowNew.setAttribute("aria-describedby", desc);
+				windowNew.querySelector("[data-label]").id = label;
+				windowNew.querySelector("[data-desc]").id = desc;
+				windowNew.querySelector("[data-ok]").setAttribute("data-ok", this.id);
+				windowNew.style.left = `calc(50% - ${halfWinWidth}px)`;
+				windowNew.style.transform = `translate(${this.x}px,${this.y}px)`;
+
+				this.activate();
+			}
+		}
+		get errorMessage() {
+			const errorList = [
+			    "Account is blocked.",
+			    "Account not found.",
+			    "Error occurred.",
+			    "Account denied.",
+			    "Fatal error encountered.",
+			    "Access to the account is restricted.",
+			    "Oops! Something went wrong.",
+			    "Authentication failed.",
+			    "Unauthorized access attempt.",
+			    "Critical system error.",
+			    "Account suspended.",
+			    "Permission denied.",
+			    "Unexpected error.",
+			    "Account access is prohibited.",
+			    "Connection lost.",
+			    "Account not found 0012830927046)",
+			    "Account not found 0012831295669)",
+			    // Add more customized error messages as needed
+			];
+
+			return errorList[Utils.randomInt(0, errorList.length - 1)];
+		}
+		activate() {
+			this.el.classList.add(this.activeClass);
+			this.el.setAttribute("aria-hidden", false);
+			this.active = true;
+			this.parent.appendChild(this.el);
+		}
+		deactivate() {
+			this.el.classList.remove(this.activeClass);
+			this.el.setAttribute("aria-hidden", true);
+			this.active = false;
+		}
+		close() {
+			this.deactivate();
+			this.parent.removeChild(this.el);
+			this.isClosing = true;
+		}
+		moveBy(x,y) {
+			this.x += x;
+			this.y += y;
+			this.el.style.transform = `translate(${this.x}px,${this.y}px)`;
+		}
+	}
+
+	class Utils {
+		static randomInt(min = 0,max = 2**32) {
+			const percent = crypto.getRandomValues(new Uint32Array(1))[0] / 2**32;
+			const relativeValue = (max - min) * percent;
+
+			return min + Math.round(relativeValue);
+		}
+	}
+</script>
+</html>
